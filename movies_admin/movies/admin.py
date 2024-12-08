@@ -7,10 +7,12 @@ from movies.search import search_filmworks
 
 
 class GenreFilmworkInline(admin.TabularInline):
+    autocomplete_fields = ('genre', 'film_work')
     model = models.GenreFilmwork
     extra = 1
 
 class PersonFilmworkInline(admin.TabularInline):
+    autocomplete_fields = ('person', 'film_work')
     model = models.PersonFilmWork
     extra = 1
 
