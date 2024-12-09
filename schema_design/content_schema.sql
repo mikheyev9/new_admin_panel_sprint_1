@@ -1,6 +1,3 @@
--- Переключение на базу данных
-\c movies_database
-
 -- Создание схемы content
 CREATE SCHEMA IF NOT EXISTS content;
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
