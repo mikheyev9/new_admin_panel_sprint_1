@@ -6,8 +6,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY', ''),
 
 DEBUG = os.environ.get('DEBUG', False) == 'True'
 
-ALLOWED_HOSTS = ['127.0.0.1']
-INTERNAL_IPS = ['127.0.0.1']
+
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+INTERNAL_IPS = os.getenv('INTERNAL_IPS').split(',')
 
 ROOT_URLCONF = 'config.urls'
 
