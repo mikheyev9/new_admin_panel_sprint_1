@@ -1,7 +1,8 @@
 include .env
 export $(shell sed 's/=.*//' .env)
 
-.PHONY: build run stop restart shell logs clean network
+.PHONY: build run stop restart shell logs clean \
+	check_network create-network copy-static run-nginx run-uwsgi
 
 
 # Сборка Docker-образа
@@ -95,7 +96,12 @@ run-nginx:
 	docker run --rm --name nginx \
 		--network app_network \
 		-p 80:80 \
-		-v $(PWD)/temp-django.conf:/etc/nginx/conf.d/django.conf:ro \
-		-v $(PWD)/static:/static:ro \
+		--mount type=bind,source=$(PWD)/temp-django.conf,target=/etc/nginx/conf.d/django.conf,readonly \
+		--mount type=bind,source=$(PWD)/static,target=/static,readonly \
 		nginx:latest
 	rm -f $(PWD)/temp-django.conf
+
+run-uwsgi:
+	echo $(shell pwd)/static
+	uwsgi --module=config.wsgi --http :8000 --static-map /static=$(shell pwd)/static
+

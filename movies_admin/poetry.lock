@@ -194,7 +194,17 @@ files = [
     {file = "tzdata-2024.2.tar.gz", hash = "sha256:7d85cc416e9382e69095b7bdf4afd9e3880418a2413feec7069d533d6b4e31cc"},
 ]
 
+[[package]]
+name = "uwsgi"
+version = "2.0.28"
+description = "The uWSGI server"
+optional = false
+python-versions = "*"
+files = [
+    {file = "uwsgi-2.0.28.tar.gz", hash = "sha256:79ca1891ef2df14508ab0471ee8c0eb94bd2d51d03f32f90c4bbe557ab1e99d0"},
+]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "81767220deb9b467103666d44008637b2cc8c10293f46e392e2342d4dab93d8d"
+content-hash = "3b1b6c1e68eab290b0d0c92961acc76144516b746f99370b7131b8322cc407fa"
