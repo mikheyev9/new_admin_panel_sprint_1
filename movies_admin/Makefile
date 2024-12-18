@@ -7,7 +7,7 @@ export $(shell sed 's/=.*//' .env)
 
 # Сборка Docker-образа
 build:
-	docker build --progress=plain \
+	docker build \
 		--build-arg SECRET_KEY="$(SECRET_KEY)" \
 		--build-arg DEBUG="$(DEBUG)" \
 		-t $(IMAGE_NAME) .
@@ -30,6 +30,7 @@ run: check_network create-network
 		-e "INTERNAL_IPS=$(INTERNAL_IPS)" \
 		$(IMAGE_NAME)
 
+# Запуск приложения с удаленной БД
 run-db-remote create-network:
 	docker run --rm -d --name $(CONTAINER_NAME) \
 		--network app_network --network-alias $(CONTAINER_NAME) \
@@ -67,7 +68,7 @@ clean:
 	docker rm $(CONTAINER_NAME) || true
 	docker ps -a --filter "ancestor=$(IMAGE_NAME)" --format "{{.ID}}" | xargs -r docker stop || true
 	docker ps -a --filter "ancestor=$(IMAGE_NAME)" --format "{{.ID}}" | xargs -r docker rm || true
-	docker rmi $(IMAGE_NAME) || true
+	#docker rmi $(IMAGE_NAME) || true
 
 # Проверка наличия сети
 check_network:
