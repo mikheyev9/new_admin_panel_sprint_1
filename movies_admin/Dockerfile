@@ -19,13 +19,4 @@ RUN pip install --no-cache-dir poetry \
 # Копируем весь проект в контейнер
 COPY . /app/
 
-ENV PYTHONUNBUFFERED=1 \
-    DJANGO_SETTINGS_MODULE=config.settings \
-    POETRY_VIRTUALENVS_CREATE=false
-
 EXPOSE 8000
-
-RUN poetry run python manage.py collectstatic --noinput --clear
-
-# Применяем миграции и запускаем сервер
-CMD ["sh", "-c", "python manage.py migrate && uwsgi --ini uwsgi.ini"]

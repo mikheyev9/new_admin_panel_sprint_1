@@ -1,0 +1,48 @@
+services:
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${IMAGE_NAME}
+    container_name: ${CONTAINER_NAME}
+    environment:
+      PYTHONUNBUFFERED: 1
+      DJANGO_SETTINGS_MODULE: config.settings
+    env_file:
+      - .env
+    volumes:
+      - ./static_prod:/app/static
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput --clear &&
+             uwsgi --ini uwsgi.ini"
+    networks:
+      - app_network
+      - schema_design_default
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    depends_on:
+      - django
+    ports:
+      - "80:80"
+    networks:
+      - app_network
+    volumes:
+      - ./run_nginx.sh:/usr/local/bin/run_nginx.sh
+      - ./django-ng.conf:/etc/nginx/templates/django.conf.template:ro
+      - ./static:/static:ro
+    entrypoint: >
+      sh -c "chmod +x /usr/local/bin/run_nginx.sh &&
+             /usr/local/bin/run_nginx.sh"
+    environment:
+      CONTAINER_NAME: ${CONTAINER_NAME}
+      PORT: ${PORT}
+
+
+networks:
+  app_network:
+  schema_design_default:
+    external: true
+
